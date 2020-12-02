@@ -2,8 +2,10 @@ def conforms_r1(password, char, num1, num2):
     count = password.count(char)
     return num1 <= count <= num2
 
+
 def conforms_r2(password, char, num1, num2):
-    return (password[num1-1] == char) != (password[num2-1] == char)
+    return (password[num1 - 1] == char) != (password[num2 - 1] == char)
+
 
 with open("input.txt") as f:
     content = f.readlines()

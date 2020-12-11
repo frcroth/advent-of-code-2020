@@ -13,15 +13,10 @@ def save_array_access(seat_x, seat_y):
 
 
 def get_adjacent_seats(seat_x, seat_y):
-    adjacent = []
-    adjacent.append(save_array_access(seat_x-1, seat_y))
-    adjacent.append(save_array_access(seat_x+1, seat_y))
-    adjacent.append(save_array_access(seat_x, seat_y+1))
-    adjacent.append(save_array_access(seat_x, seat_y-1))
-    adjacent.append(save_array_access(seat_x-1, seat_y+1))
-    adjacent.append(save_array_access(seat_x-1, seat_y-1))
-    adjacent.append(save_array_access(seat_x+1, seat_y+1))
-    adjacent.append(save_array_access(seat_x+1, seat_y-1))
+    adjacent = [save_array_access(seat_x - 1, seat_y), save_array_access(seat_x + 1, seat_y),
+                save_array_access(seat_x, seat_y + 1), save_array_access(seat_x, seat_y - 1),
+                save_array_access(seat_x - 1, seat_y + 1), save_array_access(seat_x - 1, seat_y - 1),
+                save_array_access(seat_x + 1, seat_y + 1), save_array_access(seat_x + 1, seat_y - 1)]
 
     return list(filter(None, adjacent))
 
@@ -52,18 +47,10 @@ def see_seats(seat_x, seat_y, diff_x, diff_y):
 
 
 def get_seats_seen(seat_x, seat_y):
-    seen = []
-    # horizontal
-    seen.append(see_seats(seat_x+1, seat_y, 1, 0))
-    seen.append(see_seats(seat_x-1, seat_y, -1, 0))
-    # vertical
-    seen.append(see_seats(seat_x, seat_y+1, 0, 1))
-    seen.append(see_seats(seat_x, seat_y-1, 0, -1))
-    # diagonal
-    seen.append(see_seats(seat_x+1, seat_y+1, 1, 1))
-    seen.append(see_seats(seat_x-1, seat_y+1, -1, 1))
-    seen.append(see_seats(seat_x+1, seat_y-1, 1, -1))
-    seen.append(see_seats(seat_x-1, seat_y-1, -1, -1))
+    seen = [see_seats(seat_x + 1, seat_y, 1, 0), see_seats(seat_x - 1, seat_y, -1, 0),
+            see_seats(seat_x, seat_y + 1, 0, 1), see_seats(seat_x, seat_y - 1, 0, -1),
+            see_seats(seat_x + 1, seat_y + 1, 1, 1), see_seats(seat_x - 1, seat_y + 1, -1, 1),
+            see_seats(seat_x + 1, seat_y - 1, 1, -1), see_seats(seat_x - 1, seat_y - 1, -1, -1)]
 
     return seen
 

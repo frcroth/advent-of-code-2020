@@ -7,7 +7,7 @@ content = [x.strip() for x in content]
 def parse_line(line):
     operation = line.split(' ')[0]
     value = int(line.split(' ')[1])
-    return (operation, value)
+    return operation, value
 
 
 def parse_input(input):
@@ -18,9 +18,9 @@ def parse_input(input):
     return code
 
 
-def change_statement(pos, newstatement, code):
+def change_statement(pos, new_statement, code):
     code = code.copy()
-    code[pos] = (newstatement, code[pos][1])
+    code[pos] = (new_statement, code[pos][1])
     return code
 
 
@@ -39,7 +39,7 @@ def swap_and_check(code):
         result = execute(changed_code)
         if "Done" in result:
             return result.split(":")[1]
-    return "No swap successfull"
+    return "No swap successful"
 
 
 def execute(code):

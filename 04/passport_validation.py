@@ -16,6 +16,7 @@ for line in content:
 # last passport
 passports.append(current_passport.strip())
 
+
 # validate passports
 
 
@@ -68,7 +69,7 @@ def check_validity2(passport):
         # print(passport + " is not valid because of hair color (missing #)")
         return False
     for char in data['hcl'][1:]:
-        if not char in "0123456789abcdef":
+        if char not in "0123456789abcdef":
             # print(passport + " is not valid because of hair color")
             return False
     if not data['ecl'] in ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']:
@@ -78,7 +79,7 @@ def check_validity2(passport):
         # print(passport + " is not valid because of pid (length not right)")
         return False
     for char in data['pid'][1:]:
-        if not char in "0123456789":
+        if char not in "0123456789":
             # print(passport + " is not valid because of pid (non valid chars)")
             return False
 

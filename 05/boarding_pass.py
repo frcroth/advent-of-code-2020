@@ -13,14 +13,17 @@ def translate(boarding_string):
     col = col.replace("R","1")
     return int(row, base=2), int(col, base=2)
 
+
 def seat_id(boarding_string):
     row, col = translate(boarding_string)
     return row * 8 + col
+
 
 # Task 1
 def get_max_id():
     boarding_ids = map(seat_id, content)
     return max(boarding_ids)
+
 
 # Task 2
 def get_missing_seat():

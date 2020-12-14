@@ -40,7 +40,6 @@ def task1():
 def task2():
 
     diff1, diff2, diff3 = get_diffs()
-    jolts = content
     # all numbers with difference 3 must be part of every solution
     # --> Separate into parts that are 3 apart --> edges are part of any solution
     parts = []

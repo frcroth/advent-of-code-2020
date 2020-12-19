@@ -1,3 +1,5 @@
+import re
+
 
 def read_input():
     with open('input.txt') as f:
@@ -30,42 +32,14 @@ def read_input():
     return rule_dict, test_strings
 
 
-def combine_rec(list_of_sets):
-    if list_of_sets is None:
-        return []
-    current_set = list_of_sets[0]
-    results = set()
-    if len(list_of_sets) == 1:
-        return list(list_of_sets[0])
-    for string in list(current_set):
-        options = combine_rec(list_of_sets[1:])
-        for option in options:
-            results.add(string + option)
-    return results
-
-
-def get_string_set(rule_numbers, fixed_rule_dict):
-    #print("get string set for numbers " + str(rule_numbers))
-    sequence = []
-    for num in rule_numbers:
-        sequence.append(fixed_rule_dict[num])
-    #print("calculating combinations of " + str(sequence))
-    solutions = combine_rec(sequence)
-    if type(solutions) is not set:
-        return set(solutions)
-    #print("got string set for numbers " + str(rule_numbers) + ", it's " + str(solutions))
-    return solutions
-
-
 def build_strings(rule_dict, task_2=False):
-    loop_depth = 10
+    loop_depth = 3  # tested, 3 was the lowest for my input
     fixed_rule_dict = dict()
     for rule_num, rule in rule_dict.items():
         if rule_dict[rule_num][0] == "literal":
-            fixed_rule_dict[rule_num] = set(rule_dict[rule_num][1])
+            fixed_rule_dict[rule_num] = rule_dict[rule_num][1]
     while len(fixed_rule_dict.keys()) < len(rule_dict):
         for rule_num, rule in rule_dict.items():
-            # print(fixed_rule_dict)
             if rule[0] == "direct" and not rule_num in fixed_rule_dict:
                 may_be_solved = True
                 for num in rule[1]:
@@ -73,16 +47,21 @@ def build_strings(rule_dict, task_2=False):
                         may_be_solved = False
                         break
                 if may_be_solved:
-                    solutions = get_string_set(rule[1], fixed_rule_dict)
-                    fixed_rule_dict[rule_num] = solutions
+                    solution = ""
+                    for num in rule[1]:
+                        solution += fixed_rule_dict[num]
+                    fixed_rule_dict[rule_num] = "(" + solution + ")"
                 if rule_num == '8' and task_2 and may_be_solved:
                     for i in range(loop_depth):
-                        solutions = get_string_set(['42','8'], fixed_rule_dict)
-                        fixed_rule_dict[rule_num] = fixed_rule_dict[rule_num].union(solutions)
+                        prev_solution = fixed_rule_dict[rule_num]
+                        fixed_rule_dict[rule_num] = "(" + prev_solution + \
+                            "|" + prev_solution + prev_solution + ")"
                 if rule_num == '11' and task_2 and may_be_solved:
                     for i in range(loop_depth):
-                        solutions = get_string_set(['42','11','31'], fixed_rule_dict)
-                        fixed_rule_dict[rule_num] = fixed_rule_dict[rule_num].union(solutions)
+                        prev_solution = fixed_rule_dict[rule_num]
+                        fixed_rule_dict[rule_num] = "(" + prev_solution + "|" + \
+                            fixed_rule_dict['42'] + prev_solution + \
+                            fixed_rule_dict['31'] + ")"
             if rule[0] == "optional" and not rule_num in fixed_rule_dict:
                 may_be_solved = True
                 for num in rule[1]:
@@ -94,28 +73,33 @@ def build_strings(rule_dict, task_2=False):
                         may_be_solved = False
                         break
                 if may_be_solved:
-                    solution1 = get_string_set(rule[1], fixed_rule_dict)
-                    solution1 = solution1.union(
-                        get_string_set(rule[2], fixed_rule_dict))
-                    fixed_rule_dict[rule_num] = set(solution1)
+                    solution1 = ""
+                    for num in rule[1]:
+                        solution1 += fixed_rule_dict[num]
+                    solution2 = ""
+                    for num in rule[2]:
+                        solution2 += fixed_rule_dict[num]
+                    fixed_rule_dict[rule_num] = "(" + \
+                        solution1 + "|" + solution2 + ")"
     return fixed_rule_dict
 
 
-def get_correct_strings(rule_dict, task_2=False):
+def get_complete_regex(rule_dict, task_2=False):
     return build_strings(rule_dict, task_2)['0']
 
 
-def get_number_of_matching_strings(correct_strings, input_strings):
+def get_number_of_matching_strings(regex, input_strings):
     correct_sum = 0
+    correct_regex = re.compile(regex)
     for input_str in input_strings:
-        if input_str in correct_strings:
+        if correct_regex.fullmatch(input_str) is not None:
             correct_sum += 1
     return correct_sum
 
 
 def calc_task(task_2=False):
     rule_dict, test_strings = read_input()
-    correct_strings = get_correct_strings(rule_dict, task_2)
+    correct_strings = get_complete_regex(rule_dict, task_2)
     return get_number_of_matching_strings(correct_strings, test_strings)
 
 

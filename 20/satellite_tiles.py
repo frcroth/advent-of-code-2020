@@ -1,7 +1,7 @@
 
 def read_tiles():
 
-    with open('example1.txt') as f:
+    with open('input.txt') as f:
         content = f.readlines()
 
     content = [x.strip() for x in content]
@@ -117,21 +117,6 @@ def build_tile_array(tile_array, dimension, transform_dict, transformation_borde
     return None
 
 
-def print_tile(tile):
-    for line in tile:
-        print(''.join(map(str, line)))
-    print("\n")
-
-
-def print_tile_id_array(tile_array):
-    print(str(tile_array[0][0]) + "|" +
-          str(tile_array[1][0]) + "|" + str(tile_array[2][0]))
-    print(str(tile_array[0][1]) + "|" +
-          str(tile_array[1][1]) + "|" + str(tile_array[2][1]))
-    print(str(tile_array[0][2]) + "|" +
-          str(tile_array[1][2]) + "|" + str(tile_array[2][2]))
-
-
 solution = None
 
 
@@ -148,32 +133,76 @@ def solve():
         solution = new_solution
 
 
-def get_tile_without_border(tile):
-    tile.pop(0)
-    tile.pop(len(tile)-1)
-    new_tile = []
-    for line in tile:
-        new_tile.append(line[1:-1])
-    return new_tile
-
-
 def build_image():
-    tiles = read_tiles()
-    transform_dict = build_transformation_dict(tiles)
+    transform_dict = build_transformation_dict(read_tiles())
     solve()
     image = []
     for tile_row in solution:
         tiles = []
         for tile_id, transformation_id in tile_row:
-            tiles.append(get_tile_without_border(
-                transform_dict[tile_id][transformation_id]))
-        print(tiles[0])
-        for i in range(len(tiles[0])):
+            tile = transform_dict[tile_id][transformation_id]
+            tiles.append([line[1:-1] for line in tile[1:-1]])
+        for y in range(len(tiles[0][0])):
             current_line = []
-            for tile in tiles:
-                current_line.extend(tile[i])
+            for i in range(len(tiles)):
+                current_line.extend(tiles[i][x][y]
+                                    for x in range(len(tiles[i])))
             image.append(current_line)
     return image
+
+
+monster = [(18, 0), (0, 1), (5, 1), (6, 1), (11, 1), (12, 1), (17, 1),
+           (18, 1), (19, 1), (1, 2), (4, 2), (7, 2), (10, 2), (13, 2), (16, 2)]
+
+
+def is_sea_monster(image, x, y):
+    dimension = len(image)
+    extent_x = 20
+    extent_y = 3
+    if x + extent_x - 1 > dimension or y + extent_y - 1 > dimension:
+        return False
+    for x_pos, y_pos in monster:
+        if image[y_pos+y][x_pos+x] != '#':
+            return False
+    return True
+
+
+def get_sea_monster_position(image, x, y):
+    positions_in_image = []
+    for x_pos, y_pos in monster:
+        positions_in_image.append((x_pos+x, y_pos+y))
+    return positions_in_image
+
+
+def get_sea_monster_transformation(image):
+    transformations = get_transformations(image)
+    for transformation in transformations:
+        for y in range(len(image)):
+            for x in range(len(image)):
+                if is_sea_monster(transformation, x, y):
+                    return transformation
+
+
+def count_non_sea_monsters(image):
+    sea_monster_tiles = set()
+    for y in range(len(image)):
+        for x in range(len(image)):
+            if is_sea_monster(image, x, y):
+                sea_monster_tiles.update(
+                    set(get_sea_monster_position(image, x, y)))
+    count = 0
+    for y in range(len(image)):
+        for x in range(len(image)):
+            if image[y][x] == '#' and (x, y) not in sea_monster_tiles:
+                count += 1
+
+    return count
+
+
+def task_2():
+    image = build_image()
+    sea_monster_transformation = get_sea_monster_transformation(image)
+    return count_non_sea_monsters(sea_monster_transformation)
 
 
 def task_1():
@@ -183,4 +212,4 @@ def task_1():
 
 print(task_1())
 
-print(build_image())
+print(task_2())

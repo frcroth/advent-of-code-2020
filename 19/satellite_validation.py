@@ -52,12 +52,12 @@ def build_strings(rule_dict, task_2=False):
                         solution += fixed_rule_dict[num]
                     fixed_rule_dict[rule_num] = "(" + solution + ")"
                 if rule_num == '8' and task_2 and may_be_solved:
-                    for i in range(loop_depth):
+                    for _ in range(loop_depth):
                         prev_solution = fixed_rule_dict[rule_num]
                         fixed_rule_dict[rule_num] = "(" + prev_solution + \
                             "|" + prev_solution + prev_solution + ")"
                 if rule_num == '11' and task_2 and may_be_solved:
-                    for i in range(loop_depth):
+                    for _ in range(loop_depth):
                         prev_solution = fixed_rule_dict[rule_num]
                         fixed_rule_dict[rule_num] = "(" + prev_solution + "|" + \
                             fixed_rule_dict['42'] + prev_solution + \

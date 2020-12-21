@@ -6,39 +6,39 @@ with open('input.txt') as f:
 content = [x.strip() for x in content]
 food = []
 for line in content:
-    ingredients = line.split('(')[0].strip().split(' ')
-    allergens = line.split('contains ')[1][:-1].split(', ')
+    ingredients = set(line.split('(')[0].strip().split(' '))
+    allergens = set(line.split('contains ')[1][:-1].split(', '))
     food.append((ingredients, allergens))
 
 
 def get_allergens():
-    allergens = []
+    allergens = set()
     for f in food:
-        allergens.extend(f[1])
-    return list(set(allergens))
+        allergens.update(f[1])
+    return allergens
 
 
 def get_all_ingredients():
-    ingredients = []
+    ingredients = set()
     for f in food:
-        ingredients.extend(f[0])
-    return list(set(ingredients))
+        ingredients.update(f[0])
+    return ingredients
 
 
 def get_possible_values_for_allergen(allergen):
-    ingredients = set(get_all_ingredients())
+    ingredients = get_all_ingredients()
     for f in food:
         if allergen in f[1]:
-            ingredients = ingredients.intersection(set(f[0]))
-    return list(ingredients)
+            ingredients &= f[0]
+    return ingredients
 
 
 def get_ingredients_without_allergens():
-    ingredients = set(get_all_ingredients())
+    ingredients = get_all_ingredients()
     for allergen in get_allergens():
         possible_ingredients = get_possible_values_for_allergen(allergen)
-        ingredients = ingredients - set(possible_ingredients)
-    return list(ingredients)
+        ingredients -= possible_ingredients
+    return ingredients
 
 
 def count_appearance_of_ingredient(ingredient):
@@ -74,8 +74,8 @@ def get_ingredients_for_allergents():
                 allergen_dict[f[1][0]] = f[0][0]
         for allergent in all_allergents:
             if allergent not in allergen_dict:
-                ingredients_for_allergent = set(
-                    get_possible_values_for_allergen(allergent))
+                ingredients_for_allergent = get_possible_values_for_allergen(
+                    allergent)
                 for i, f in enumerate(ingredient_allergent_list):
                     if allergent in f[1]:
                         ingredients_for_allergent = ingredients_for_allergent.intersection(

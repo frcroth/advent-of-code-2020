@@ -79,7 +79,9 @@ def get_empty_tile_array(tiles):
     return [[None] * get_dimension(tiles) for _ in range(get_dimension(tiles))]
 
 
-def build_tile_array(tile_array, dimension, transform_dict, transformation_border_dict, x=0, y=0, placed=set()):
+def build_tile_array(tile_array, dimension, transform_dict, transformation_border_dict, x=0, y=0, placed=None):
+    if placed is None:
+        placed = set()
     if y == dimension:
         # Done
         return tile_array
@@ -134,6 +136,7 @@ def solve():
 
 
 def build_image():
+    global solution
     transform_dict = build_transformation_dict(read_tiles())
     solve()
     image = []
@@ -167,7 +170,7 @@ def is_sea_monster(image, x, y):
     return True
 
 
-def get_sea_monster_position(image, x, y):
+def get_sea_monster_position(x, y):
     positions_in_image = []
     for x_pos, y_pos in monster:
         positions_in_image.append((x_pos+x, y_pos+y))
@@ -189,7 +192,7 @@ def count_non_sea_monsters(image):
         for x in range(len(image)):
             if is_sea_monster(image, x, y):
                 sea_monster_tiles.update(
-                    set(get_sea_monster_position(image, x, y)))
+                    set(get_sea_monster_position(x, y)))
     count = 0
     for y in range(len(image)):
         for x in range(len(image)):

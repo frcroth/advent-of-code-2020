@@ -50,7 +50,7 @@ def play_game_1():
     player_2_cards = player_cards[2].copy()
     while True:
         winner = get_winner(player_1_cards, player_2_cards)
-        if winner == None:
+        if winner is None:
             player_1_cards, player_2_cards = play_round(
                 player_1_cards, player_2_cards)
         elif winner == 1:
@@ -66,26 +66,26 @@ def get_round_hash(player_1_cards, player_2_cards):
 def play_recursive_game(player_1_cards, player_2_cards, previous_rounds=set()):
     while len(player_1_cards) > 0 and len(player_2_cards) > 0:
         if get_round_hash(player_1_cards, player_2_cards) in previous_rounds:
-            return (1, player_1_cards)
+            return 1, player_1_cards
         previous_rounds.add(get_round_hash(player_1_cards, player_2_cards))
         player_1_card = player_1_cards.pop(0)
         player_2_card = player_2_cards.pop(0)
-        roundwinner = None
+        round_winner = None
         if player_1_card <= len(player_1_cards) and player_2_card <= len(player_2_cards):
-            roundwinner = play_recursive_game(
+            round_winner = play_recursive_game(
                 player_1_cards[:player_1_card].copy(), player_2_cards[:player_2_card].copy(), set())[0]
         else:
-            roundwinner = 1 if player_1_card > player_2_card else 2
-        if roundwinner == 1:
+            round_winner = 1 if player_1_card > player_2_card else 2
+        if round_winner == 1:
             player_1_cards.append(player_1_card)
             player_1_cards.append(player_2_card)
         else:
             player_2_cards.append(player_2_card)
             player_2_cards.append(player_1_card)
     if len(player_1_cards) == 0:
-        return (2, player_2_cards)
+        return 2, player_2_cards
     if len(player_2_cards) == 0:
-        return (1, player_1_cards)
+        return 1, player_1_cards
 
 
 def play_game_2():

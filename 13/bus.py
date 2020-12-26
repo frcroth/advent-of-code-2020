@@ -1,6 +1,5 @@
 from functools import reduce
 import math
-from numpy import lcm
 
 with open('input.txt') as f:
     content = f.readlines()
@@ -40,9 +39,9 @@ def task_2():
     remainders = []
     for i in range(len(busses)):
         if busses[i] != 'x':
-            busId = int(busses[i])
-            remainders.append((busId-i) % busId)
-            n.append(busId)
+            bus_id = int(busses[i])
+            remainders.append((bus_id-i) % bus_id)
+            n.append(bus_id)
     return chinese_remainder(n, remainders)
 
 # https://rosettacode.org/wiki/Chinese_remainder_theorem#Python

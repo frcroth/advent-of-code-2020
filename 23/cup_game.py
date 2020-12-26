@@ -4,7 +4,6 @@ initial_label = [5, 8, 3, 9, 7, 6, 2, 4, 1]
 
 def play_round(cups, current_cup_index):
     current_cup = cups[current_cup_index]
-    pick_up = []
 
     if current_cup_index + 4 > len(cups) - 1:
         if current_cup_index+1 <= len(cups) - 1:
@@ -44,7 +43,7 @@ def play_game(game_count):
     cups, current = initial_label, 0
     for _ in range(game_count):
         cups, current = play_round(cups, current)
-    return(generate_output(cups))
+    return generate_output(cups)
 
 
 def init_crab_cubs(initial_cups):

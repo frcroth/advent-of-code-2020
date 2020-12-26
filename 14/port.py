@@ -16,12 +16,12 @@ def task_1():
         if line.startswith("mem"):
             address = re.findall(r"\[[0-9]*\]", line)[0][1:][:-1]
             value = line.split("=")[1].strip()
-            binaryvalue = "{0:b}".format(int(value))
-            binaryvalue = bin_pad(binaryvalue, 36)
+            binary_value = "{0:b}".format(int(value))
+            binary_value = bin_pad(binary_value, 36)
             effective_binary_value = ""
             for i in range(36):
                 if current_bitmask[i] == 'X':
-                    effective_binary_value += binaryvalue[i]
+                    effective_binary_value += binary_value[i]
                 if current_bitmask[i] == '0' or current_bitmask[i] == '1':
                     effective_binary_value += current_bitmask[i]
             memory[address] = effective_binary_value

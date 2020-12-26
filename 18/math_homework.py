@@ -31,15 +31,13 @@ def merge(tokens):
 
 def merge_with_precedence(tokens):
     # tokens may not include ( or )
-    result = 0
     # calculate addition
     while '+' in tokens:
         for i, token in enumerate(tokens):
             if token == '+':
-                summand1 = tokens.pop(i-1)
-                sign = tokens.pop(i-1)
-                summand2 = tokens.pop(i-1)
-                tokens.insert(i-1, int(summand1) + int(summand2))
+                addend_1 = tokens.pop(i-1)
+                addend_2 = tokens.pop(i-1)
+                tokens.insert(i-1, int(addend_1) + int(addend_2))
                 break
     return merge(tokens)
 

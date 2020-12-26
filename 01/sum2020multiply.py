@@ -5,7 +5,7 @@ content = [int(x.strip()) for x in content]
 
 look_for_three = True
 
-if lookforthree:
+if look_for_three:
     for num1 in content:
         for num2 in content:
             for num3 in content:
